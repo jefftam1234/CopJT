@@ -155,9 +155,9 @@ def plot_joint_cdf(T, S, copula_name):
 
 ### 📌 Step 5: Run Simulations for Different Copulas ###
 copulas = {
-    "Gaussian": GaussianCopula(rho=0.3),
     "Student-t": StudentTCopula(rho=0.3, df=5),
-    "Clayton": ClaytonCopula(theta=2)
+    "Clayton": ClaytonCopula(theta=2),
+    "Gaussian": GaussianCopula(rho=0.3),
 }
 
 for name, copula in copulas.items():
@@ -165,3 +165,11 @@ for name, copula in copulas.items():
     T, S = simulation.generate_joint_distribution()
     plot_heatmap(T, S, name)
     plot_joint_cdf(T, S, name)
+
+
+# Using the deterministic hazard (piecewise with constant rate) simulation (gaussian for last)
+p1_const = np.mean((T <= 2) & (S <= 110))  # ~0.41
+p2_const = np.mean((T <= 4) & (S <= 150))  # ~0.70
+
+print(f"Probability of default before time 2 and stock price below 110 (Constant Hazard): {p1_const:.2f}")
+print(f"Probability of default before time 4 and stock price below 150 (Constant Hazard): {p2_const:.2f}")
